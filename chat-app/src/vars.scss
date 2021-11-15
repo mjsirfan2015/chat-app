@@ -1,0 +1,93 @@
+:root [data-theme=default]{
+    //components
+    //--bg-main:hsl(0,0,90);
+    --bg-main:white;
+    --bg-primary:hsl(280, 40%, 85%);
+    --bg-secondary:hsl(232,52%,76%);//hsl(232,52%,86%);
+    --bg-nav-primary:hsl(246, 77%, 32%);
+    --bg-nav-secondary:hsl(274, 66%, 40%);
+    --btn-danger:red;
+    --btn-primary:hsla(280, 52%, 50%, 1);
+    --btn-secondary:hsl(246, 77%, 32%);
+    --btn-disabled:hsl(120, 64%, 78%);
+    --btn-blue:blue;
+    --btn-green:green;
+    --text-primary:white;
+    --text-primary-dark:black;
+    --text-danger:red;
+    --text-secondary:#817E7E;
+    --bg-primary-dark:hsl(280, 52%, 70%);
+    --bg-secondary-dark:hsl(236,52%,70%);
+    --bg-divide:hsl(0, 0%, 74%);
+    --bg-strip:#C4C4C4;
+    //common
+}
+
+:root [data-theme=auth]{
+    //components
+    //--bg-main:hsl(0,0,90);
+    --bg-main:hsl(246, 77%, 32%);
+    --bg-login:white;
+    --bg-login-dark:rgba(20, 67, 255, 1);
+    --bg-primary:hsl(280, 40%, 85%);
+    --bg-secondary:hsl(232,52%,76%);//hsl(232,52%,86%);
+    --bg-nav-primary:hsl(246, 77%, 32%);
+    --bg-nav-secondary:hsl(274, 66%, 40%);
+    --btn-danger:red;
+    --btn-primary:hsla(280, 52%, 50%, 1);
+    --btn-secondary:hsl(246, 77%, 32%);
+    --btn-disabled:hsl(120, 64%, 78%);
+    --btn-blue:blue;
+    --btn-green:green;
+    --text-primary:white;
+    --text-primary-dark:black;
+    --text-secondary:#817E7E;
+    --bg-primary-dark:hsl(280, 52%, 80%);
+    --bg-secondary-dark:hsl(236,52%,60%);
+    --bg-divide:hsl(0, 0%, 74%);
+    --bg-strip:#C4C4C4;
+    //common
+}
+
+$cols:main,primary,secondary,primary-dark,secondary-dark,danger,nav-primary,nav-secondary,strip,many,login,login-dark;
+
+@mixin bg-class($cols){
+    @each $col in $cols{
+        .c-bg-#{$col}{
+            background-color:var(--bg-#{$col});
+        }
+    }
+}
+$cols-btnn:"primary","disabled","green","blue",danger,"secondary";
+
+@mixin type-class($cols-btn,$type:btn){
+    @each $col in $cols-btn{
+        .c-#{$type}-#{$col}{
+            background-color:var(--#{$type}-#{$col});
+        }
+    }
+}
+.c-text-primary{
+    color:var(--text-primary);
+    &:hover{
+        color:var(--text-primary);
+    }
+}
+
+.c-text-primary-dark{
+    color:var(--text-primary-dark);
+    &:hover{
+        color:var(--text-primary-dark);
+    }
+}
+
+.c-text-danger{
+    color:var(--text-danger);
+    &:hover{
+        color:var(--text-danger);
+    }
+}
+
+@include type-class($cols-btnn,btn);
+
+@include bg-class($cols);
