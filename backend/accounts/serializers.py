@@ -8,6 +8,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from backend import settings
 import uuid
 from django.core.mail import send_mail
+import logging
 class EmailSerializer(serializers.Serializer):
     '''
         Generate otp request from email
@@ -15,6 +16,7 @@ class EmailSerializer(serializers.Serializer):
     email = serializers.EmailField()
     otp   = serializers.CharField(read_only=True)
     def create(self,data):
+        logging.debug("hi")
         otp=TOTP(random_base32()).now()#generate otp
         #check if already exists
         request = RequestTable.objects.filter(email=data["email"])

@@ -2,7 +2,7 @@ import { BrowserRouter,Route,Switch } from 'react-router-dom';
 import './App.scss';
 import AuthPage from './AuthPage';
 import MainPage from './MainPage';
-import axios from 'axios';
+//import axios from 'axios';
 function App() {
   return (
     <div data-theme="default">

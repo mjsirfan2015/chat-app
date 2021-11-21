@@ -66,7 +66,7 @@ class AuthPage extends React.Component{
         
     }
     render(){
-        const {show,handleClose}=this.props;
+        //const {show,handleClose}=this.props;
         const{email,otp,redirect}=this.state;
         //const display=!show?{display:'none'}:{};
         if (redirect)return <Redirect to='/mainPage'/>
