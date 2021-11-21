@@ -23,7 +23,6 @@ def HeaderMiddleWare(get_response):
     # One-time configuration and initialization.
 
     def middleware(request):
-        print("hi")
         request._force_auth_user,request._force_auth_token=CustomAuthentication().authenticate(request)
         response = get_response(request)
 

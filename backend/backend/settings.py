@@ -15,8 +15,7 @@ from pathlib import Path
 #import django_heroku
 import mimetypes
 from time import sleep
-
-
+from decouple import config
 mimetypes.add_type("text/javascript", ".js", True)
 mimetypes.add_type("text/css", ".css", True)
 
@@ -227,14 +226,12 @@ USE_L10N = True
 USE_TZ = True
 
 #email info
-'''EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'techknocksirfan@gmail.com'
-EMAIL_HOST_PASSWORD = 'jztzqkxkigqnrkoc'''
-EMAIL_HOST = '127.0.0.1'
-EMAIL_PORT = 1025
-EMAIL_HOST_USER = 'techknocksirfan@gmail.com'
 
+EMAIL_USE_TLS = config('EMAIL_USE_TLS',False)
+EMAIL_HOST = config('EMAIL_HOST',None)
+EMAIL_PORT = config('EMAIL_PORT',None)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER',None)
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD',None)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/

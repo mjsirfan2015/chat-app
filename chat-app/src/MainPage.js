@@ -42,7 +42,6 @@ const SelfInfoTile = ({setContacts,user})=>{
                         <span className="material-icons" onClick={onDrop}>more_vert</span>
                         {dropdown && <div className="dd-menu">
                             <li className="p-3" onClick={()=>handleShow(true)}>Add Contact</li>
-                            <li className="p-3">Invite Contacts</li>
                         </div>}
                     </div>
                     <AddContactModal show={show} handleClose={()=>handleShow(false)}
@@ -109,7 +108,7 @@ function ChatBubble({dir,content,name}){
         </div>
     );
 }
-const str="Lorem Ipsum is simply dummy text of theeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s," 
+//const str="Lorem Ipsum is simply dummy text of theeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s," 
 
 let socket;
 class MainPage extends React.Component{
@@ -187,7 +186,7 @@ class MainPage extends React.Component{
     message=(e)=>{
         //senf message to socketio server
         const value=this.state.value.trim();
-        if(value !='' &&  value!=' '){
+        if(value !=='' &&  value!==' '){
             let messages=this.state.messages.slice();
             messages=messages.concat([{type:0,string:this.state.value,'name':'You'}]);
             //console.log(messages)
@@ -213,7 +212,7 @@ class MainPage extends React.Component{
     }
 
     render(){
-        const {value,switcher,redirect,contacts,messages,clickedContact,user}=this.state;
+        const {value,switcher,redirect,contacts,clickedContact,user}=this.state;
         if (redirect)return <Redirect to='/'/>
         return(
             <div className="d-flex" style={{height:'100vh',maxHeight:'100vh',width:'100%'}}>
@@ -240,7 +239,7 @@ class MainPage extends React.Component{
                             style={{'cursor':'pointer'}}>
                             arrow_back
                     </span>
-                            <img src={Image} width='50px' height='50px' 
+                            <img src={user?user.image:Image} width='50px' height='50px' 
                         className="avatar-small  ms-4" alt="profile pic"/>
                             <div className="hidableText ms-4"style={{fontSize: "20px",height:'30px'}}>{clickedContact.name}</div>
                         </div>

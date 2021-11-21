@@ -6,7 +6,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken
 from accounts.models import Profile
 from rest_framework.parsers import FormParser, JSONParser,MultiPartParser
-
+import logging
 #from rest_framework.decorators import apiview
 from accounts.serializers import *
 # Create your views here
