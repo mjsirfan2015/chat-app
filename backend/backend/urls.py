@@ -23,6 +23,7 @@ urlpatterns = [
     path('api/accounts/',include('accounts.urls')),
     path('api/contacts/',include('contacts.urls')),
     path('api/chats/',include('chats.urls')),
+    path('api/rooms/',include('rooms.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

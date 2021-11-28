@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'accounts',
     'contacts',
     'chats',
+    'rooms',
     'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -69,26 +70,6 @@ MIDDLEWARE = [
 
 ]
 APPEND_SLASH=False
-'''DATABASES = {
-
-    'default': {
-
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-
-        #'ATOMIC_REQUESTS' : True 
-
-        'NAME': 'd5792n8a2gn109',
-
-        'USER': 'nosgyqbxcknaxy',
-
-        'PASSWORD': '7357d50d03665633f9fe6f420e9e12da647f074ee09558249bc8ce5fa935582e',
-
-        'HOST': 'ec2-3-95-85-91.compute-1.amazonaws.com',
-
-        'PORT': '5432',
-
-    }
-}'''
 CORS_ORIGIN_ALLOW_ALL = True#CORS settings
 
 CORS_ALLOW_HEADERS = [
@@ -252,7 +233,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 '''STATICFILES_DIRS = (
   os.path.join(PROJECT_ROOT, 'build/templates/build/static'),
 )'''
-print("project_goo:",PROJECT_ROOT)
 #print("project:",STATIC_ROOT)
 
 #django_heroku.settings(locals())

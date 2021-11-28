@@ -1,0 +1,41 @@
+@mixin contactColorable{
+    color:var(--text-primary);   
+     &:hover{
+      background-color: var(--bg-primary-hover);
+      color:var(--text-primary);
+    }
+}
+
+.btn-ico-2{
+    border:none;
+    $width:30px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height:$width;
+    width:$width;
+    background-color: transparent;
+    @include contactColorable();
+}
+
+.contactList{
+    //width:30%;
+    min-width: $sideWidthMin;
+  }
+  
+  .contactListItem{
+    width:100%;
+    cursor: pointer;
+    //border:1px solid var(--btn-primary);
+    color:var(--text-primary);
+   @include contactColorable();
+  }
+
+  /*@include media-breakpoint-down(md){
+    .contactList{
+      width:100%;
+      max-width: 100%;
+    }
+  }*/
+  

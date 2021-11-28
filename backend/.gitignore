@@ -5,3 +5,4 @@ static
 __pycache__
 .env
 .env.tmp
+rooms
