@@ -2,13 +2,65 @@
     //components
     //--bg-main:hsl(0,0,90);
     --bg-main:white;
-    --bg-primary:hsl(280, 40%, 85%);
+    --bg-main-hover:hsl(232,52%,90%);//hsl(232,52%,86%);
+    --bg-primary:hsla(280, 52%, 50%, 1);//hsl(246, 77%, 32%);
+    --bg-primary-hover:hsl(280, 52%, 55%);
     --bg-secondary:hsl(232,52%,76%);//hsl(232,52%,86%);
     --bg-nav-primary:hsl(246, 77%, 32%);
     --bg-nav-secondary:hsl(274, 66%, 40%);
     --btn-danger:red;
     --btn-primary:hsla(280, 52%, 50%, 1);
     --btn-secondary:hsl(246, 77%, 32%);
+    --btn-disabled:hsl(120, 64%, 78%);
+    --btn-blue:blue;
+    --btn-green:green;
+    --text-primary:white;
+    --text-primary-dark:black;
+    --text-danger:red;
+    --text-secondary:#817E7E;
+    --bg-primary-dark:hsl(280, 52%, 70%);
+    --bg-secondary-dark:hsl(236,52%,70%);
+    --bg-divide:hsl(0, 0%, 74%);
+    --bg-strip:#C4C4C4;
+    //common
+}
+
+:root [data-theme=green]{
+    //components
+    //--bg-main:hsl(0,0,90);
+    --bg-main:white;
+    --bg-main-hover:hsl(120, 100%, 90%);//hsl(232,52%,86%);
+    --bg-primary:green;//hsl(246, 77%, 32%);
+    --bg-primary-hover:hsl(120, 100%, 30%);
+    --bg-secondary:hsl(232,52%,76%);//hsl(232,52%,86%);
+    --btn-danger:red;
+    --btn-primary:green;
+    --btn-secondary:hsl(246, 77%, 32%);
+    --btn-disabled:hsl(120, 64%, 78%);
+    --btn-blue:blue;
+    --btn-green:green;
+    --text-primary:white;
+    --text-primary-dark:black;
+    --text-danger:red;
+    --text-secondary:#817E7E;
+    --bg-primary-dark:hsl(280, 52%, 70%);
+    --bg-secondary-dark:hsl(236,52%,70%);
+    --bg-divide:hsl(0, 0%, 74%);
+    --bg-strip:#C4C4C4;
+    //common
+}
+
+:root [data-theme=blue]{
+    //components
+    //--bg-main:hsl(0,0,90);
+    --bg-main:white;
+    --bg-main-hover:hsl(280, 52%, 90%);//hsl(232,52%,86%);
+    --bg-primary:hsl(246, 77%, 32%);//hsl(246, 77%, 32%);
+    --bg-primary-hover:hsl(246, 77%, 40%);
+    --bg-secondary:hsl(280, 52%, 55%);//hsl(232,52%,86%);
+    --btn-danger:red;
+    --btn-primary:hsl(246, 77%, 32%);
+    --btn-secondary:hsla(280, 52%, 50%, 1);;
     --btn-disabled:hsl(120, 64%, 78%);
     --btn-blue:blue;
     --btn-green:green;

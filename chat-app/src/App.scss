@@ -16,7 +16,7 @@ $sideWidthMin:300px;
 
 * {
   font-family: Roboto, sans-serif;
- 
+  
 }
 
 //$primary:green;
@@ -79,29 +79,23 @@ background-color: red;
 color:green;
 }
 
-.contactList{
-  width:50%;
-  min-width: $sideWidthMin;
-}
-
-.contactListItem{
-  width:100%;
-  height:90px;
-  cursor: pointer;
-  //border:1px solid var(--btn-primary);
-  color:var(--text-primary-dark);
-  &:hover{
-    background-color: var(--btn-secondary);
-    color:var(--text-primary);
-  }
-}
 
 .avatar-small{
-  border-radius: 50px;
-  min-width:50px;
-  width:50px;
-  min-height:50px;
-  height:50px;
+  $image-width:20px;
+  border-radius: 5px;
+  min-width:$image-width;
+  width:$image-width;
+  min-height:$image-width;
+  height:$image-width;
+}
+
+.avatar-medium{
+  $image-width:40px;
+  border-radius: 5px;
+  min-width:$image-width;
+  width:$image-width;
+  min-height:$image-width;
+  height:$image-width;
 }
 
 .avatar-big{
@@ -117,6 +111,8 @@ color:green;
       text-overflow: ellipsis;
       word-break: break-all;
       white-space: nowrap; 
+      font-weight:300;
+      color:var(--text-primary)
     }
 
 .chatSection{
@@ -129,16 +125,7 @@ color:green;
   height:70px;
 }
 
-.sidebar{
-  position:fixed;
-  top:0;
-  left:0;
-  transition:transform 1s;
-  width: 300px;
-  height: 100vh;
-  min-height:100vh;
-  z-index:2;
-}
+
 
 .profileHeader{
   cursor: default;
@@ -167,13 +154,6 @@ color:green;
   &:disabled{
     color:var(--btn-secondary);
   }
-}
-
-#profile{
-  background-color:var(--bg-primary-dark);
-}
-.translator{
-  transform:translateX(-300px);
 }
 
 .chat{
@@ -234,13 +214,6 @@ color:green;
   max-width: 400px;
   //height:100%;
   opacity:1!important;
-}
-
-@include media-breakpoint-down(md){
-  .contactList{
-    width:100%;
-    max-width: 100%;
-  }
 }
 
 .dd-menu{
@@ -322,3 +295,53 @@ color:green;
 .btn-ico{
   border-radius: 30px;
 }
+
+.navbar{
+  margin:0;
+  padding: 0;
+  position: absolute;
+  height:6vh;
+  background-color: var(--bg-primary);
+  border-bottom:2px solid var(--bg-primary-hover);
+  width:100%;
+  z-index:100;
+}
+
+.empty-screen{
+  button{
+    min-width: 150px;
+  }
+}
+
+  .sidebar{
+    position:fixed;
+    top:0;
+    left:0;
+    transition:transform 1s;
+    width: $sideWidthMin;
+    height: 100vh;
+    min-height:100vh;
+    z-index:2;
+  }
+  .translator{
+    transform:translateX(-$sideWidthMin);
+  }
+
+.theme-color{
+  $rad:50px;
+  height:$rad;
+  width:$rad;
+  border-radius:30px;
+  &.purple{
+    background-color: hsla(280, 52%, 50%, 1);;
+  }
+  &.green{
+    background-color: green;
+  }
+  &.blue{
+    background-color: hsl(246, 77%, 32%);
+  }
+}
+
+@import './contacts/contacts.scss';
+@import './chats/chats.scss';

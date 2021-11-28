@@ -1,5 +1,7 @@
+import uuid
 from django.db import models
 from contacts.models import Contact
+from django.contrib.auth.models import User
 # Create your models here.
 class Chat(models.Model):
     message=models.CharField(max_length=255)
