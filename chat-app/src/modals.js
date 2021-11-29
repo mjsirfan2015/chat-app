@@ -20,11 +20,13 @@ class AddContactModal extends React.Component{
         this.props.setContacts()
         this.props.handleClose()
       } catch (error) {
-        console.log(error.response.status)
-        if(error.response.status===400){
-          let data  = error.response.data.error_msg
-          console.log(data["email"])
-          this.setState({error:data["email"]})
+       
+            console.log(error.response.status)
+            if(error.response.status===400){
+              let data  = error.response.data.error_msg
+              console.log(data["email"])
+              this.setState({error:data["email"]})
+
         }
       }
       

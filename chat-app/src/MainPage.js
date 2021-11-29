@@ -13,7 +13,7 @@ const NavBar = function(){
     document.addEventListener('click',(e)=>{
         const element1 = document.getElementById('content');
         //console.log(element)(element.contains(e.target))
-        if((element1.contains(e.target))){
+        if(element1&&(element1.contains(e.target))){
             //console.log(!side,!element1.contains(e.target),!element2.contains(e.target))
             document.getElementById('list').classList.add('translator')
             setSide(true);
@@ -34,7 +34,7 @@ const NavBar = function(){
         <div className="navbar" id="mainNav">
             <div className="d-flex align-items-center ">
                 <button className="btn-ico-2 d-md-none me-2" style={{height:'4vh'}}onClick={showSide}>
-                <span class="material-icons">
+                <span className="material-icons">
                 menu
                 </span>
                 </button>
@@ -62,19 +62,19 @@ const EmptyScreen=({showAddContact,hide})=>{
     if(!hide)return(
         <div className="d-flex flex-column justify-content-center align-items-center empty-screen"
         style={{height:'100vh'}}>
-            <span class="material-icons"style={{fontSize:128}}>
+            <span className="material-icons"style={{fontSize:128}}>
                 people_alt
             </span>
             <button className="btn c-btn-primary c-text-primary d-flex align-items-center"
             onClick={showAddContact}>
-                <span class="material-icons">
+                <span className="material-icons">
                     add
                 </span>
                 
                 Add Contacts
             </button>
             {/*<button className="btn c-btn-primary c-text-primary d-flex align-items-center mt-2">
-                <span class="material-icons">
+                <span className="material-icons">
                     add
                 </span>
                 
@@ -213,9 +213,10 @@ class MainPage extends React.Component{
             handleClose={()=>this.setState({showTheme:false})}/>
             <NavBar/>
             <Profile show={showProfile} handleClose={()=>this.setState({showProfile:false})}
-            handleImage={this.handleImage} user={user} theme={theme}/>
+            handleImage={this.handleImage} user={user} theme={theme} handleUpdate={this.handleUpdate}/>
             <AddContactModal show={showAddContact} theme={theme}
-            handleClose={()=>this.setState({showAddContact:false})}/>
+            handleClose={()=>this.setState({showAddContact:false})}
+            setContacts={this.setContacts}/>
             
             <div className="d-flex" style={{width:'100%'}}>
                 
