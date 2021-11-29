@@ -40,7 +40,7 @@ class Profile extends React.Component{
             <Modal show={show} onHide={handleClose} animation={false} data-theme={this.props.theme}centered
       >
       <Modal.Header closeButton  className="c-btn-primary c-text-primary">
-        <Modal.Title>Add Contact</Modal.Title>
+        <Modal.Title>Edit/View Profile</Modal.Title>
       </Modal.Header>
       <Modal.Body>
                 <div className="d-flex flex-column" id ="profile"

@@ -3,10 +3,10 @@ import React from 'react'
 const ExpandButton = ({expand=false,onClick=null})=>{
     return(<button className="btn-ico-2" onClick={onClick}>
         {expand?
-            <span class="material-icons">
+            <span className="material-icons">
             arrow_drop_down
             </span>:
-            <span class="material-icons">
+            <span className="material-icons">
             arrow_drop_up
             </span>
         }
