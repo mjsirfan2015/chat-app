@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from rest_framework.response import Response
 from socketio import namespace
 import json
 import jwt
@@ -9,33 +10,57 @@ from chats.models import Chat
 from chats.serializers import ChatSer
 from contacts.models import Contact
 from rest_framework import generics,mixins
-async_mode = None
+import logging
+from datetime import datetime
+from decouple import config
 
+async_mode = None
+logging.basicConfig(level = logging.DEBUG)
 
 import socketio
 
 sio = socketio.Server(async_mode=async_mode,cors_allowed_origins='*')
 
 
-class ChatView(generics.ListAPIView,generics.DestroyAPIView,generics.UpdateAPIView):
+class ChatView(mixins.ListModelMixin,generics.DestroyAPIView,generics.UpdateAPIView):
     serializer_class=ChatSer
+    def get(self, request):
+        datas = self.list(request).data
+        '''chats={}
+        first_data=None
+        for data in range(len(datas)):
+            if first_data is not None:
+                if datas[first_data]["user_id"]==datas[data]["user_id"] and\
+                    datas[first_data]["date"]==datas[data]["date"]:
+                    datas[first_data]["string"]+=[datas[first_data]["string"]]
+                else:
+                    first_data=None
+        for data in datas:
+            date=data["date"]
+            if chats.get(date,None)is None:chats[date]=[]
+            data.pop("date")
+            chats[date]+=[data]
+            
+        chats=[{"date":date,"chats":chats[date]} for  date in chats]'''
+        return Response(datas)
+
     def get_queryset(self):
         return Chat.objects.filter(contact__room=self.request.GET.get("room")).order_by('posted_on')
     
 # Create your views here.
 @sio.event
 def message(sid, message):
-    print(sid)
-    print(message)
+    logging.debug(sid)
+    logging.debug(message)
     sio.emit('response',f"{message.get('name',None)}: {message.get('message',None)}")
 
 class MyCustomNamespace(socketio.Namespace):
     def on_connect(self, sid, environ):
-        print('Connectedxx')
+        logging.debug('Connectedxx')
         #sio.emit('response',"connected,y'all!",namespace='/test')
 
     def on_disconnect(self, sid):
-        print('DisConnectedxx')
+        logging.debug('DisConnectedxx')
         sio.disconnect(sid)
 
     def on_begin_chat(self,sid,room):
@@ -48,8 +73,8 @@ class MyCustomNamespace(socketio.Namespace):
 
     #@sio.event(namespace='/test')
     def on_message(self,sid, message):
-        print(sid)
-        print(message)
+        logging.debug(sid)
+        logging.debug(message)
         sio.emit('response',f"{message.get('name',None)}: {message.get('message',None)}",namespace='/test',room=message["room"])
 
 #
@@ -78,23 +103,23 @@ class ChatNamespace(socketio.Namespace):
             sio.disconnect(sid)
 
     def on_connect(self, sid, environ):
-        print('Connectedxx')
+        logging.debug('Connectedxx')
         #sio.emit('response',"connected,y'all!",namespace='/chat')
 
     def on_disconnect(self, sid):
-        print('DisConnectedxx')
+        logging.debug('DisConnectedxx')
         sio.disconnect(sid)
 
     def on_begin_chat(self,sid,room,key):
-        print(key)
-        print("BeginningChat 1....")
+        logging.debug(key)
+        logging.debug("BeginningChat 1....")
         #decode key
         user = self.decode(key,sid)
-        print(room)
+        logging.debug(room)
         self.verify_contact(room,sid)
-        print("BeginningChat 2....")
-        print("room: ",room)
-        print(user)
+        logging.debug("BeginningChat 2....")
+        logging.debug("room: ",room)
+        logging.debug(user)
 
         sio.enter_room(sid,room,namespace='/chat')
         sio.emit(sid,"Entered room!")
@@ -105,15 +130,19 @@ class ChatNamespace(socketio.Namespace):
 
     #@sio.event(namespace='/test')
     def on_message(self,sid, message):
-        print(message)
+        logging.debug(message)
         user = self.decode(message["token"],sid)
-        m={"id":user["user_id"],"message":message["message"]}
+        user1=User.objects.get(id=user["user_id"])
+        
         self.verify_contact(message["id"],sid)
-        contact =  Contact.objects.filter(room=message["id"],user=user['user_id'])[0]
+        contact =  Contact.objects.filter(room=message["id"],user=user["user_id"])[0]
+        m={"id":user["user_id"],"message":message["message"],"posted_on":str(datetime.now()),"name":user1.first_name,\
+            "user_id":user1.id,"profile_pic":f"{config('BASE_URL','')}{user1.profile.image.url}" if\
+                user1.profile.image is not None else None }
+        print(m)
         #add chat to model
         Chat.objects.create(contact=contact,message=message["message"])
         sio.emit('response',json.dumps(m),\
             namespace='/chat',room=message["id"])
 
-sio.register_namespace(MyCustomNamespace('/test'))
 sio.register_namespace(ChatNamespace('/chat'))

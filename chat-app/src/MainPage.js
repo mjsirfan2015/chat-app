@@ -1,114 +1,102 @@
 import React from 'react';
-import Image from './assets/Image.webp';
 import Profile from './Profile';
-import {AddContactModal} from './modals';
+import {AddContactModal, ChangeThemeModal} from './modals';
 import apis from './apis';
 import { Redirect } from 'react-router';
 import { io } from "socket.io-client";
+import {  ContactInfo, ExpandableContainer } from './contacts/contacts';
+import Chat from './chats/chats';
 
-const SelfInfoTile = ({setContacts,user})=>{
-    const [dropdown,setDropDown]=React.useState(false);
-    const [show,handleShow]=React.useState(false);
-    const f=(e)=>{
-            if (!document.getElementById('dd').contains(e.target)){
-                setDropDown(false);
-            }
+const NavBar = function(){
+    const [side, setSide] = React.useState(true)
+    
+    document.addEventListener('click',(e)=>{
+        const element1 = document.getElementById('content');
+        //console.log(element)(element.contains(e.target))
+        if(element1&&(element1.contains(e.target))){
+            //console.log(!side,!element1.contains(e.target),!element2.contains(e.target))
+            document.getElementById('list').classList.add('translator')
+            setSide(true);
         }
-    const onDrop=()=>{
-        window.removeEventListener('click',f)
-        window.addEventListener('click',f);
-        setDropDown(true);
-    };
-    const openProfile=()=>{
-        console.log("here")
-        
-        const profile = document.getElementById("profile");
-        profile.classList.remove('translator');
-    }
-    
-    console.log(user)
-    return(
-        <div className="contactListHeader">
-                <div className="d-flex align-items-center px-3 ps-2"style={{
-                    height:'100%',width:'100%'
-                }}>
-                    <img src={user?user.image:Image} 
-                className="avatar-small  ms-4" alt="profile pic" onClick={openProfile}/>
-                    
-                    <div className="hidableText ms-4"style={{fontSize: "20px",height:'30px'}}>{user && user.name}</div>
-                    
-                    <div className="flex-grow-1"></div>
-                    <div className="dropdown" style={{position:'relative'}} id="dd">
-                        <span className="material-icons" onClick={onDrop}>more_vert</span>
-                        {dropdown && <div className="dd-menu">
-                            <li className="p-3" onClick={()=>handleShow(true)}>Add Contact</li>
-                        </div>}
-                    </div>
-                    <AddContactModal show={show} handleClose={()=>handleShow(false)}
-                    setContacts={setContacts}/>
-                </div>
-        </div>
-    )
-}
-
-const ContactInfo = ({contact,switchContacts})=>{
-    return(
-        <div className="contactListItem"onClick={switchContacts}>
-            <div className="d-flex align-items-center px-3"style={{
-                height:'100%',width:'100%'
-            }}>
-                <img src={contact.image===null?Image:contact.image} 
-            className="ms-md-1 avatar-small me-1" alt="profile pic" />
-                <div className="d-flex flex-column mx-md-2 textArea"
-                style={{minWidth:'30%',width:'180px'}}>
-                    <div className="hidableText" style={{fontSize: "17px",height:'30px'}}>{contact.name}</div>
-                    <div className="hidableText" style={{fontSize: "12px"}}>{contact.about}</div>
-                </div>
-                <div className="mb-4 ps-4 flex-grow-1 px-3" style={{fontSize: "12px",textAlign:'end'}}>
-                    {contact.last_login}
-                </div>
-            </div>
-            
-        </div>
-    )
-}
-
-function ChatBubble({dir,content,name}){
-    //const [content,setContent]=React.useState("")
-    const myref=React.createRef()
-    
-    React.useEffect(()=>{
-        const setcontent=()=>{
-            /*const elems = myref.current;
-            console.log(elems)
-            if(content){}
-            //elems.classList.add('trans');
-            setTimeout(()=>setContent(contentItem),300)*/
-        };
-        setcontent();
     });
-    return(
-        <div className={`d-flex chat ${dir} my-2 `} style={{width:'100%'}}>
-                <div className="chatBubble trans mx-3 p-3 pt-1 c-text-primary" ref={myref}>
-                    <div className="d-flex"style={{width:'100%',fontSize:'12px',fontWeight:'300'}}>
-                        <div className="">{name}</div>
-                        {/*<div className="flex-grow-1" style={{textAlign:'end'}}>3:30PM</div>*/}
 
-                    </div>
-                    <div className="pt-1">
-                        {content}
-                    </div>
-                    <div className="d-flex" style={{width:'100%'}}>
-                    <div className="flex-grow-1"></div>
-                    {/*<span className="material-icons md-18">
-                    done
-    </span>*/}
-                    </div>
-                </div>
+    
+    const showSide=()=>{
+        if (!side){
+            document.getElementById('list').classList.add('translator')
+            setSide(true);
+        }else{
+            document.getElementById('list').classList.remove('translator')
+            setSide(false);
+        }
+    }
+    return (
+        <div className="navbar" id="mainNav">
+            <div className="d-flex align-items-center ">
+                <button className="btn-ico-2 d-md-none me-2" style={{height:'4vh'}}onClick={showSide}>
+                <span className="material-icons">
+                menu
+                </span>
+                </button>
+                <div className="fs-5 c-text-primary d-flex align-items-center" style={{height:'4vh'}}>Chat-App</div>
+            </div>
         </div>
+    )
+}
+
+//const str="Lorem Ipsum is simply dummy text of theeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s," 
+
+const AddButton=({text,onClick=null})=>{
+    return(
+        <button className="btn-ico-2 ps-4"style={{width:'100%'}} onClick={onClick}>       
+            <span className="material-icons">
+            add
+            </span>
+            <div className="hidableText fs-6 c-text-primary pt-1"
+            style={{textAlign:'left'}}>{text}</div>
+        </button>
     );
 }
-//const str="Lorem Ipsum is simply dummy text of theeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s," 
+
+const EmptyScreen=({showAddContact,hide})=>{
+    if(!hide)return(
+        <div className="d-flex flex-column justify-content-center align-items-center empty-screen"
+        style={{height:'100vh'}}>
+            <span className="material-icons"style={{fontSize:128}}>
+                people_alt
+            </span>
+            <button className="btn c-btn-primary c-text-primary d-flex align-items-center"
+            onClick={showAddContact}>
+                <span className="material-icons">
+                    add
+                </span>
+                
+                Add Contacts
+            </button>
+            {/*<button className="btn c-btn-primary c-text-primary d-flex align-items-center mt-2">
+                <span className="material-icons">
+                    add
+                </span>
+                
+                Add Rooms
+    </button>*/}
+        </div>        
+    )
+    else return null;
+}
+
+const SideBar = ({children})=>{
+    return(
+        <>
+            <div className="c-bg-primary contactList d-none d-md-block"style={{height:'100vh',maxHeight:'100vh',overflow:'auto',paddingTop:'5vh'}}>
+            {children}
+            </div>
+            <div id="list" className="sidebar c-bg-primary contactList d-md-none translator"style={{height:'100vh',maxHeight:'100vh',overflow:'auto',paddingTop:'5vh'}}>
+            {children}
+            </div>
+        </>
+    )
+}
 
 let socket;
 class MainPage extends React.Component{
@@ -120,7 +108,11 @@ class MainPage extends React.Component{
             switcher:true,
             redirect:false,
             contacts:[],
-            clickedContact:{}
+            clickedContact:{},
+            showAddContact:false,
+            page:null,
+            showProfile:false,
+            showTheme:false,
         }
         this.ref=React.createRef();
     }  
@@ -141,14 +133,12 @@ class MainPage extends React.Component{
       componentDidMount = async()=>{
         try {
             let data = await apis.verifyLogin();            
-            console.log(!data.data.data.success && !this.state.redirect)
             if(!data.data.data.success && !this.state.redirect)this.setState({redirect:true})
             else{
                 data = data.data
                 this.setState({user_id:data.data.user_id,user:data.data,token:data.data.token})
                 data = await apis.viewContact();
                 this.setState({contacts:data.data.data})
-                console.log(data)
         }
         } catch (error) {
             console.log(error)
@@ -161,8 +151,8 @@ class MainPage extends React.Component{
             data=JSON.parse(data);
             if(data.id!==this.state.user_id){//check if message from other user
                 let messages=this.state.messages.slice();
-                messages=messages.concat([{type:1,string:data.message}]);
-                //console.log(messages)
+                messages=messages.concat([{type:1,string:data.message,posted_on:data.posted_on,name:data.name,user_id:data.user_id,
+                profile_pic:data.profile_pic}]);
                 this.setState({messages:messages})
             }
         })
@@ -188,10 +178,9 @@ class MainPage extends React.Component{
         const value=this.state.value.trim();
         if(value !=='' &&  value!==' '){
             let messages=this.state.messages.slice();
-            messages=messages.concat([{type:0,string:this.state.value,'name':'You'}]);
-            //console.log(messages)
-            this.setState({messages:messages,clicked:true})
-            //console.log({name:this.state.user_id,message:value,room:'room'})
+            messages=messages.concat([{type:0,string:this.state.value,'name':this.state.user.name,user_id:this.state.user.user,posted_on:new Date(Date.now()),profile_pic:this.state.user.image}],
+            );
+            this.setState({messages:messages,clicked:true,value:''})
             socket.emit('message',{id:this.state.clickedContact.room,message:value,
             token:this.state.token})
             //scroll to bottom
@@ -206,68 +195,91 @@ class MainPage extends React.Component{
     }
 
     handleImage=async()=>{
+        console.log("hi")
         await apis.editImage(this.state.user_id,new FormData(document.getElementById("fileForm")));
         let data = await apis.verifyLogin();
         this.setState({user:data.data.data})
     }
 
     render(){
-        const {value,switcher,redirect,contacts,clickedContact,user}=this.state;
+        const {value,redirect,contacts,clickedContact,user,showAddContact,
+            showProfile,showTheme}=this.state;
+        const {theme,setTheme}=this.props;
         if (redirect)return <Redirect to='/'/>
         return(
-            <div className="d-flex" style={{height:'100vh',maxHeight:'100vh',width:'100%'}}>
-                <Profile user={user} handleUpdate={this.handleUpdate} handleImage={this.handleImage}/>
+        
+        <div style={{height:'100vh',maxHeight:'100vh',width:'100%'}}>
+            <ChangeThemeModal theme={theme} setTheme={setTheme} show={showTheme}
+            handleClose={()=>this.setState({showTheme:false})}/>
+            <NavBar/>
+            <Profile show={showProfile} handleClose={()=>this.setState({showProfile:false})}
+            handleImage={this.handleImage} user={user} theme={theme} handleUpdate={this.handleUpdate}/>
+            <AddContactModal show={showAddContact} theme={theme}
+            handleClose={()=>this.setState({showAddContact:false})}
+            setContacts={this.setContacts}/>
+            
+            <div className="d-flex" style={{width:'100%'}}>
                 
-                <div className={`contactList c-bg-primary ${ switcher?"":"d-none d-md-block"}`}
-                style={{height:'100vh',maxHeight:'100vh',overflow:'auto'}}>
+                <SideBar>
+                    <div className=""
+                    >
+                        <ExpandableContainer text="Contacts">
+                            <>
+                                {contacts.map((contact,index)=>
+                                    <ContactInfo contact={contact} switchContacts={()=>this.switchContacts(index)} 
+                                    key={index}/>
+                                )}
+                                <AddButton text="Add Contact" onClick={()=>this.setState({showAddContact:true})}/>
+                            </>
+                        </ExpandableContainer>
+
+                    </div>
+                    <div className="contactListItem ps-3 fw-light py-2" 
+                    onClick={()=>this.setState({showProfile:true})}>Edit Profile</div>
+                    <div className="contactListItem ps-3 fw-light py-2"
+                    onClick={()=>this.setState({showTheme:true})}>Change Theme</div>
                     
-                    <SelfInfoTile setContacts={this.setContacts} user={user}/>
-                    {contacts.map((contact,index)=>
-                        <ContactInfo contact={contact} switchContacts={()=>this.switchContacts(index)} key={index}/>
-                    )}
-                </div>
-           <div className={switcher?"d-none d-md-block":""} style={{width:'100%'}} >
-                <div className={`chatSection d-flex flex-column-reverse  c-bg-secondary`} style={{height:'100vh',
+                    {/*<div className={`contactList c-bg-primary ${ switcher?"":"d-none d-md-block"}`}
+                    >
+                        <ExpandableContainer text="Rooms">
+                            <>
+                            {contacts.map((contact,index)=>
+                                <RoomInfo contact={contact} switchContacts={()=>this.switchContacts(index)} key={index}/>
+                            )}
+                            <AddButton text="Add Room"/>
+                            </>
+                        </ExpandableContainer>
+                            </div>*/}
+            </SideBar>
+           <div className="content c-bg-main" style={{width:'100%'}} id="content" >
+
+           <EmptyScreen hide={clickedContact.id!==undefined}
+           showAddContact={()=>{this.setState({showAddContact:true})}}/>
+            {clickedContact.id!==undefined &&<div className={`chatSection d-flex flex-column-reverse`} style={{height:'100vh',maxHeight:'100vh',
                     position:'relative'}}id="chat">
                     
-                    {Object.keys(clickedContact).length>0 && <div className="contactListHeader"  style={{position:'absolute',top:0,width:'100%',backgroundColor:
-                'var(--btn-secondary)',zIndex:23}}>
-                        <div className="d-flex align-items-center px-3"style={{
-                            height:'100%',width:'100%'
-                        }}>
-                            <span className="material-icons-outlined d-md-none" unselectable="on" onClick={()=>this.setState({switcher:true})} 
-                            style={{'cursor':'pointer'}}>
-                            arrow_back
-                    </span>
-                            <img src={user?user.image:Image} width='50px' height='50px' 
-                        className="avatar-small  ms-4" alt="profile pic"/>
-                            <div className="hidableText ms-4"style={{fontSize: "20px",height:'30px'}}>{clickedContact.name}</div>
-                        </div>
-                    </div>}
-
+    
                     <div className="search" style={{position:'relative'}}>
-                            <div className="" style={{width:'100%',maxHeight:'85vh',overflowY:'auto'}}>
-                                <div className="py-3"></div>
-                                    {this.state.messages.map((message,key)=>
-                                        <ChatBubble key={key} dir={message.type===0?'left':'right'} content={message.string}
-                                        init={key===0} name={message.type===0?"You":message.name}/>
-                                    )}
+                            <div className="" style={{width:'100%',maxHeight:'87vh',overflowY:'auto'}}>
                                 
-                            </div>
+                                 <div className="py-1"></div>
+                                        <Chat messages={this.state.messages}/>
+                                </div>
                         {Object.keys(clickedContact).length>0 && <div className="px-2 pb-2">
-                            <input type="text" name="" id="" className="form-control " style={{borderRadius:10}}
+                            
+                        </div>}
+                    <input type="text" name="" id="" className="form-control pe-5" style={{borderRadius:10}}
                             value={value} onChange={(e)=>this.setState({value:e.target.value})} onKeyDown={this._handleKeyDown}/>
                             
-                            <span className="material-icons-outlined"style={{position:'absolute',bottom:15,right:15,
+                            <span className="material-icons-outlined"style={{position:'absolute',bottom:9,right:15,
                             color:'var(--btn-primary)',cursor:'pointer'}}onClick={this.message} id='sendBtn'>
                             send
                             </span>
-                        </div>}
-                    
                     
                     </div>
                     
-                </div>
+                </div>}
+            </div>
             </div>
             </div>
             )

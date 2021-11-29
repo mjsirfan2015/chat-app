@@ -1,5 +1,5 @@
 import React from 'react';
-import apis from './apis';
+import { Modal } from 'react-bootstrap';
 import Image from './assets/Image.webp';
 
 class Profile extends React.Component{
@@ -18,36 +18,39 @@ class Profile extends React.Component{
         profile.classList.add('translator')
     }
 
-    componentDidMount = async()=>{
+    componentDidUpdate = ()=>{
         
         const {name,about}=this.state;
-        const user= await (await apis.verifyLogin()).data.data
-        if (name===null || about ===null){
-            this.setState({name:user.name,about:user.about})
+        const {user}=this.props; //await (await apis.verifyLogin()).data.data
+        if ((name===null || about ===null) && user!=null){
+            this.setState({name:user.name,about:user.about,image:user.image})
         }
     }
 
+    handleImage = async()=>{
+        await this.props.handleImage();
+        this.setState({image:this.props.user.image})
+    }
+
     render(){
-        const {user}=this.props;
-        const {name,about}=this.state;
+        const {show,handleClose}=this.props;
+        const {name,about,image}=this.state;
+        console.log(this.props.handleImage)
         return(
-                <div className="sidebar d-flex flex-column align-items-start translator" id ="profile">
-                    <div className="profileHeader mb-5" style={{width:'inherit'}}>
-                        <div className="d-flex align-items-center px-3"style={{
-                            height:'100%',width:'100%'
-                        }}>
-                            <span className="material-icons-outlined" onClick={this.onBack} style={{'cursor':'pointer'}}>
-                            arrow_back
-                            </span>
-                            <div className="hidableText ms-4 mb-2"style={{fontSize: "25px",height:'30px'}}>Profile</div>
-                        </div>
-                    </div>
+            <Modal show={show} onHide={handleClose} animation={false} data-theme={this.props.theme}centered
+      >
+      <Modal.Header closeButton  className="c-btn-primary c-text-primary">
+        <Modal.Title>Edit/View Profile</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+                <div className="d-flex flex-column" id ="profile"
+                >
                     <div className="d-flex justify-content-center" style={{width:'100%'}}>
-                        <img src={user?user.image:Image} alt="profile pic" className="avatar-big " onClick={()=>
+                    <img src={(image)?image:Image} alt="profile pic" className="avatar-big " onClick={()=>
                         document.getElementById("fileProfile").click()} style={{'cursor':'pointer'}}/>
                     </div>
                     <div className="mx-4 about">
-                         <div className="mt-5 mb-2"style={{}}>Name</div>
+                         <div className="mt-3 mb-2"style={{}}>Name</div>
                          <div className="d-flex">
                              <input type="text" className="textbox" value={name===null?"":name}
                              onChange={(e)=>this.setState({name:e.target.value})}/>
@@ -65,13 +68,19 @@ class Profile extends React.Component{
                                 edit
                 </span>*/}
                          </div>
-                         <button className="btn c-btn-secondary c-text-primary mt-3"
-                         onClick={()=>this.props.handleUpdate(name,about)}>Update</button>
+                         
                     </div>
                    <form id="fileForm">
-                       <input hidden type="file" form ="fileForm"name="image" id="fileProfile" onChange={this.props.handleImage}/>
+                       <input hidden type="file" form ="fileForm"name="image" id="fileProfile" onChange={this.handleImage}/>
                    </form>
                 </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <button className="btn c-btn-secondary c-text-primary"
+                         onClick={()=>this.props.handleUpdate(name,about)}>Update</button>
+                    <button className="btn c-btn-danger c-text-primary" onClick={handleClose}>Close</button>
+                </Modal.Footer>
+                </Modal>
             )
     }
 }
