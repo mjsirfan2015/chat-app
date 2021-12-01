@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal } from 'react-bootstrap';
+import  Modal,{Header,Body,Footer}  from './Modal';
 import Image from './assets/Image.webp';
 
 class Profile extends React.Component{
@@ -37,13 +37,15 @@ class Profile extends React.Component{
         const {name,about,image}=this.state;
         console.log(this.props.handleImage)
         return(
-            <Modal show={show} onHide={handleClose} animation={false} data-theme={this.props.theme}centered
+            <div>
+                <Modal show={show}
+                onHide={handleClose}
       >
-      <Modal.Header closeButton  className="c-btn-primary c-text-primary">
-        <Modal.Title>Edit/View Profile</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-                <div className="d-flex flex-column" id ="profile"
+      <Header>
+        Edit/View Profile
+      </Header>
+      <Body>
+                <div className="d-flex flex-column my-2" id ="profile"
                 >
                     <div className="d-flex justify-content-center" style={{width:'100%'}}>
                     <img src={(image)?image:Image} alt="profile pic" className="avatar-big " onClick={()=>
@@ -74,13 +76,14 @@ class Profile extends React.Component{
                        <input hidden type="file" form ="fileForm"name="image" id="fileProfile" onChange={this.handleImage}/>
                    </form>
                 </div>
-                </Modal.Body>
-                <Modal.Footer>
-                    <button className="btn c-btn-secondary c-text-primary"
+                </Body>
+                <Footer>
+                    <button className="btn c-btn-secondary c-text-primary ms-2"
                          onClick={()=>this.props.handleUpdate(name,about)}>Update</button>
                     <button className="btn c-btn-danger c-text-primary" onClick={handleClose}>Close</button>
-                </Modal.Footer>
-                </Modal>
+                </Footer>
+            </Modal>
+            </div>
             )
     }
 }

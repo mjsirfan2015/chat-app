@@ -20,3 +20,15 @@ def main():
 
 if __name__ == '__main__':
     main()
+    import signal
+    import sys
+    from chats.views import sio
+    def signal_handler(sig, frame):
+        print('You pressed Ctrl+C!')
+        sio.disconnect(True)
+        sys.exit(0)
+
+    signal.signal(signal.SIGINT, signal_handler)
+    print('Press Ctrl+C')
+    
+    signal.pause()
