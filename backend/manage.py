@@ -2,7 +2,7 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-
+import signal
 
 def main():
     """Run administrative tasks."""
@@ -20,8 +20,7 @@ def main():
 
 if __name__ == '__main__':
     main()
-    import signal
-    import sys
+    
     from chats.views import sio
     def signal_handler(sig, frame):
         print('You pressed Ctrl+C!')
