@@ -1,5 +1,5 @@
 import React from 'react';
-import  Modal,{Header,Body,Footer}  from './Modal';
+import  Modal,{Header,Body,Footer, Title}  from './Modal';
 import Image from './assets/Image.webp';
 
 class Profile extends React.Component{
@@ -42,7 +42,7 @@ class Profile extends React.Component{
                 onHide={handleClose}
       >
       <Header>
-        Edit/View Profile
+        <Title>Edit/View Profile</Title>
       </Header>
       <Body>
                 <div className="d-flex flex-column my-2" id ="profile"

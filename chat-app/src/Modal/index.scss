@@ -13,6 +13,7 @@
     background-color: var(--bg-main);
     border-radius: 5px;
     width:500px;
+    max-width: 90%;
 }
 @mixin header-footer{
     display: flex;
