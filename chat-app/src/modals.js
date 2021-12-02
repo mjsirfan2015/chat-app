@@ -37,9 +37,9 @@ class AddContactModal extends React.Component{
     render(){
         const {show,handleClose}=this.props;
         const{error}=this.state;
-        return(<><Modal data-theme={this.props.theme} show={show} onHide={handleClose} animation={false} centered
+        return(<><Modal show={show} onHide={handleClose} 
         >
-        <Header closeButton  className="c-btn-primary c-text-primary">
+        <Header>
           <Title>Add Contact</Title>
         </Header>
         <Body>
@@ -79,9 +79,9 @@ class ChangeThemeModal extends React.Component{
   }
   render(){
     const {show,handleClose}=this.props;
-    return(<Modal data-theme={this.props.theme} show={show} onHide={handleClose} animation={false} centered
+    return(<Modal show={show} onHide={handleClose}
     >
-    <Header closeButton  className="c-btn-primary c-text-primary">
+    <Header>
       <Title>Change Theme</Title>
     </Header>
     <Body>
@@ -116,9 +116,9 @@ class InviteModal extends React.Component{
 
   render(){
       const {show,handleClose}=this.props;
-      return(<><Modal show={show} onHide={handleClose} animation={false} data-theme="default"centered
+      return(<><Modal show={show} onHide={handleClose}
       >
-      <Header closeButton  className="c-btn-primary c-text-primary">
+      <Header>
       </Header>
       <Body>
         <div className="py-1 formLabel">
