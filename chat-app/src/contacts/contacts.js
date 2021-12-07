@@ -1,16 +1,11 @@
+import { IconButton } from '@material-ui/core'
+import { ArrowDropDown } from '@mui/icons-material'
 import React from 'react'
 
 const ExpandButton = ({expand=false,onClick=null})=>{
-    return(<button className="btn-ico-2" onClick={onClick}>
-        {expand?
-            <span className="material-icons">
-            arrow_drop_down
-            </span>:
-            <span className="material-icons">
-            arrow_drop_up
-            </span>
-        }
-    </button>)
+    return(<IconButton aria-label="menu" onClick={onClick}>
+            <ArrowDropDown/>
+            </IconButton>)
 }
 
 const ContactInfo = ({contact,switchContacts})=>{

@@ -6,8 +6,11 @@ import { Redirect } from 'react-router';
 import { io } from "socket.io-client";
 import {  ContactInfo, ExpandableContainer } from './contacts/contacts';
 import Chat from './chats/chats';
+import { Button } from '@material-ui/core';
+import { Box, IconButton,Typography,Drawer,AppBar,Toolbar } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 
-const NavBar = function(){
+const NavBar = function({setSwitch}){
     const [side, setSide] = React.useState(true)
     
     document.addEventListener('click',(e)=>{
@@ -31,16 +34,16 @@ const NavBar = function(){
         }
     }
     return (
-        <div className="navbar" id="mainNav">
-            <div className="d-flex align-items-center ">
-                <button className="btn-ico-2 d-md-none me-2" style={{height:'4vh'}}onClick={showSide}>
-                <span className="material-icons">
-                menu
-                </span>
-                </button>
-                <div className="fs-5 c-text-primary d-flex align-items-center" style={{height:'4vh'}}>Chat-App</div>
-            </div>
-        </div>
+        <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+        <Toolbar>
+            <IconButton aria-label="menu" onClick={setSwitch}>
+                <MenuIcon sx={{color:"text.secondary"}}/>
+            </IconButton>
+            <Typography variant='body' sx={{color:'text.secondary'}} mx={1}>
+                Chat-App
+            </Typography>
+        </Toolbar>
+        </AppBar>
     )
 }
 
@@ -114,7 +117,7 @@ class MainPage extends React.Component{
             showProfile:false,
             showTheme:false,
         }
-        this.ref=React.createRef();
+        this.refMain=React.createRef();
     }  
     
     _handleKeyDown = (e) => {
@@ -126,7 +129,7 @@ class MainPage extends React.Component{
 
       switchContacts = async(i)=>{
           let data  = await apis.viewChats(this.state.contacts[i].room)
-          this.setState({switcher:false,clickedContact:this.state.contacts[i],messages:data.data.data})
+          this.setState({clickedContact:this.state.contacts[i],messages:data.data.data})
           socket.emit('begin_chat',this.state.contacts[i].room,this.state.token)
       }
 
@@ -203,85 +206,36 @@ class MainPage extends React.Component{
 
     render(){
         const {value,redirect,contacts,clickedContact,user,showAddContact,
-            showProfile,showTheme}=this.state;
+            showProfile,showTheme,switcher}=this.state;
         const {theme,setTheme}=this.props;
-        if (redirect)return <Redirect to='/'/>
+        //if (redirect)return <Redirect to='/'/>
         return(
-        
-        <div style={{height:'100vh',maxHeight:'100vh',width:'100%'}}>
-            <ChangeThemeModal theme={theme} setTheme={setTheme} show={showTheme}
-            handleClose={()=>this.setState({showTheme:false})}/>
-            <NavBar/>
-            <Profile show={showProfile} handleClose={()=>this.setState({showProfile:false})}
-            handleImage={this.handleImage} user={user} theme={theme} handleUpdate={this.handleUpdate}/>
-            <AddContactModal show={showAddContact} theme={theme}
-            handleClose={()=>this.setState({showAddContact:false})}
-            setContacts={this.setContacts}/>
+            <Box sx={{display:'flex',flexDirection:'column'}}>
+                <NavBar setSwitch={()=>this.setState({switcher:!switcher})}/>
+                <Box ref={this.refMain}>
+
+                </Box>
+                <Drawer
+                    BackdropProps={{ invisible: true }}
+                    variant="permanant"
+                    open={switcher}
+                    onClose={()=>this.setState({switcher:false})}
+                    ModalProps={{
+                        keepMounted: true, // Better open performance on mobile.
+                    }}
+          sx={{
+            //display: { xs: 'block', sm: 'none' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: '300px' ,
+            backgroundColor:'primary.main'
+            },
             
-            <div className="d-flex" style={{width:'100%'}}>
-                
-                <SideBar>
-                    <div className=""
-                    >
-                        <ExpandableContainer text="Contacts">
-                            <>
-                                {contacts.map((contact,index)=>
-                                    <ContactInfo contact={contact} switchContacts={()=>this.switchContacts(index)} 
-                                    key={index}/>
-                                )}
-                                <AddButton text="Add Contact" onClick={()=>this.setState({showAddContact:true})}/>
-                            </>
-                        </ExpandableContainer>
-
-                    </div>
-                    <div className="contactListItem ps-3 fw-light py-2" 
-                    onClick={()=>this.setState({showProfile:true})}>Edit Profile</div>
-                    <div className="contactListItem ps-3 fw-light py-2"
-                    onClick={()=>this.setState({showTheme:true})}>Change Theme</div>
-                    
-                    {/*<div className={`contactList c-bg-primary ${ switcher?"":"d-none d-md-block"}`}
-                    >
-                        <ExpandableContainer text="Rooms">
-                            <>
-                            {contacts.map((contact,index)=>
-                                <RoomInfo contact={contact} switchContacts={()=>this.switchContacts(index)} key={index}/>
-                            )}
-                            <AddButton text="Add Room"/>
-                            </>
-                        </ExpandableContainer>
-                            </div>*/}
-            </SideBar>
-           <div className="content c-bg-main" style={{width:'100%'}} id="content" >
-
-           <EmptyScreen hide={clickedContact.id!==undefined}
-           showAddContact={()=>{this.setState({showAddContact:true})}}/>
-            {clickedContact.id!==undefined &&<div className={`chatSection d-flex flex-column-reverse`} style={{height:'100vh',maxHeight:'100vh',
-                    position:'relative'}}id="chat">
-                    
-    
-                    <div className="search" style={{position:'relative'}}>
-                            <div className="" style={{width:'100%',maxHeight:'87vh',overflowY:'auto'}}>
-                                
-                                 <div className="py-1"></div>
-                                        <Chat messages={this.state.messages}/>
-                                </div>
-                        {Object.keys(clickedContact).length>0 && <div className="px-2 pb-2">
-                            
-                        </div>}
-                    <input type="text" name="" id="" className="form-control pe-5" style={{borderRadius:10}}
-                            value={value} onChange={(e)=>this.setState({value:e.target.value})} onKeyDown={this._handleKeyDown}/>
-                            
-                            <span className="material-icons-outlined"style={{position:'absolute',bottom:9,right:15,
-                            color:'var(--btn-primary)',cursor:'pointer'}}onClick={this.message} id='sendBtn'>
-                            send
-                            </span>
-                    
-                    </div>
-                    
-                </div>}
-            </div>
-            </div>
-            </div>
+          }}
+        >
+          <ExpandButton/>
+        </Drawer>
+            </Box>
+           
+       
             )
     }
 }
